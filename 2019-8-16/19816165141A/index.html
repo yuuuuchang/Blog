@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="description" content="最大公约数">
+
+
+
+
+  <meta name="keywords" content="算法,">
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Yuuuuchang's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="http://yoursite.com/2019-8-16/19816165141A/">
+
+
+<meta name="description" content="辗转相除法两个正整数 a, b(a &amp;gt; b), 他们的最大公约数等于 a 除以 b 的余数 c 和 b 之间的最大公约数 a = 25b = 1025 % 10 = 2 …… 510 % 5 = 2因此最大公约数为 5 代码123456789101112// 辗转相除法function divisionAlgorithm(a, b) &amp;#123;  let max = a &amp;gt; b ?">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最大公约数">
+<meta property="og:url" content="http://yoursite.com/2019-8-16/19816165141A/index.html">
+<meta property="og:site_name" content="Yuuuuchang&#39;s Blog">
+<meta property="og:description" content="辗转相除法两个正整数 a, b(a &amp;gt; b), 他们的最大公约数等于 a 除以 b 的余数 c 和 b 之间的最大公约数 a = 25b = 1025 % 10 = 2 …… 510 % 5 = 2因此最大公约数为 5 代码123456789101112// 辗转相除法function divisionAlgorithm(a, b) &amp;#123;  let max = a &amp;gt; b ?">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2020-02-27T01:12:23.438Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="最大公约数">
+<meta name="twitter:description" content="辗转相除法两个正整数 a, b(a &amp;gt; b), 他们的最大公约数等于 a 除以 b 的余数 c 和 b 之间的最大公约数 a = 25b = 1025 % 10 = 2 …… 510 % 5 = 2因此最大公约数为 5 代码123456789101112// 辗转相除法function divisionAlgorithm(a, b) &amp;#123;  let max = a &amp;gt; b ?">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 最大公约数 - Yuuuuchang's Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Yuuuuchang's Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          最大公约数
+        
+      </h1>
+
+      <!-- <time class="post-time">
+          8月 16 2019
+      </time> -->
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <h2 id="辗转相除法"><a href="#辗转相除法" class="headerlink" title="辗转相除法"></a>辗转相除法</h2><p>两个正整数 a, b(a &gt; b), 他们的最大公约数等于 a 除以 b 的余数 c 和 b 之间的最大公约数</p>
+<p>a = 25<br>b = 10<br>25 % 10 = 2 …… 5<br>10 % 5 = 2<br>因此最大公约数为 5</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 辗转相除法</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">divisionAlgorithm</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> max = a &gt; b ? a : b;</span><br><span class="line">  <span class="keyword">let</span> min = a &lt; b ? a : b;</span><br><span class="line">  <span class="keyword">let</span> res = max % min;</span><br><span class="line">  <span class="keyword">if</span> (res) <span class="keyword">return</span> divisionAlgorithm(min, res);</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">return</span> min;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.time(<span class="string">"辗转相除法"</span>);</span><br><span class="line">divisionAlgorithm(<span class="number">10</span>, <span class="number">25</span>);</span><br><span class="line"><span class="built_in">console</span>.timeEnd(<span class="string">"辗转相除法"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"结果:"</span>, divisionAlgorithm(<span class="number">10</span>, <span class="number">25</span>), <span class="string">"\n\n"</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>辗转相除法, 如果遇到比较大的数, a%b 性能很差</p>
+<hr>
+<h2 id="更相减损法"><a href="#更相减损法" class="headerlink" title="更相减损法"></a>更相减损法</h2><p>两个正整数 a, b(a &gt; b), 他们的最大公约数等于 a - b 的差值 c 和 b 之间的最大公约数</p>
+<p>a = 25<br>b = 10<br>a - b = 15<br>15 - b = 5<br>10 - 5 = 5(减数与差相等就停止)<br>因此最大公约数为 5</p>
+<h2 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 更相减损法</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">MorePhaseSubtraction</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> max = a &gt; b ? a : b;</span><br><span class="line">  <span class="keyword">let</span> min = a &lt; b ? a : b;</span><br><span class="line">  <span class="keyword">let</span> res = max - min;</span><br><span class="line">  <span class="keyword">if</span> (min !== res) <span class="keyword">return</span> divisionAlgorithm(min, res);</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">return</span> min;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.time(<span class="string">"更相减损法"</span>);</span><br><span class="line">divisionAlgorithm(<span class="number">10</span>, <span class="number">25</span>);</span><br><span class="line"><span class="built_in">console</span>.timeEnd(<span class="string">"更相减损法"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"结果:"</span>, divisionAlgorithm(<span class="number">10</span>, <span class="number">25</span>), <span class="string">"\n\n"</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="缺点-1"><a href="#缺点-1" class="headerlink" title="缺点"></a>缺点</h2><p>两数相差较大时, 遍历次数很多, 比如(10000, 1)</p>
+<hr>
+<h2 id="更相减损法与位运算结合"><a href="#更相减损法与位运算结合" class="headerlink" title="更相减损法与位运算结合"></a>更相减损法与位运算结合</h2><ol>
+<li>a 为偶数, a 右移 1 位(a = a&gt;&gt;1), 然后重新计算 ab</li>
+<li>b 为偶数, b 右移 1 位(a = a&gt;&gt;1), 然后重新计算 ab</li>
+<li>a, b 均为奇数, 用一次更相减损法, 然后重新计算 a, a - b</li>
+<li>a === b 时, 结束</li>
+</ol>
+<h2 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a>代码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">shifting</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (a === b) &#123;</span><br><span class="line">    <span class="keyword">return</span> a;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">let</span> evenA = (a &amp; <span class="number">1</span>) === <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">let</span> evenB = (b &amp; <span class="number">1</span>) === <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">if</span> (!evenA &amp;&amp; !evenB) b = a - b;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (evenA) a = a &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">if</span> (evenB) b = b &gt;&gt; <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> shifting(a, b);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.time(<span class="string">"更相减损术与移位结合"</span>);</span><br><span class="line">shifting(<span class="number">10</span>, <span class="number">25</span>);</span><br><span class="line"><span class="built_in">console</span>.timeEnd(<span class="string">"更相减损术与移位结合"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"结果:"</span>, shifting(<span class="number">10</span>, <span class="number">25</span>), <span class="string">"\n\n"</span>);</span><br></pre></td></tr></table></figure>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/算法/">算法</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2019-8-16/19816178A/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">判断奇偶数</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2019-8-16/19816162252A/">
+        <span class="next-text nav-default">计数排序</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">yuuuuchang.</span>
+    <span class="power-by">Powered by Hexo and Polar Bear</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

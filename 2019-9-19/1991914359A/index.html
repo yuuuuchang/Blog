@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="description" content="DXY项目重构(一)--重构思路">
+
+
+
+
+  <meta name="keywords" content="DXY重构记录,">
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Yuuuuchang's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="http://yoursite.com/2019-9-19/1991914359A/">
+
+
+<meta name="description" content="约定1.项目暂以”DXY”为名.2.因为需要保密原因, 因此这里只会记录一些思路和遇到的问题之类. 起因我在前东家入职之后, 接手的第一个项目就是这个DXY项目. 主要是用jq, 利用requireJS来进行模块化, 是一个老项目了. 据我了解, 到我这里算是”八代单传”了. 项目很大, 约有6-8w行代码, 涉及十几个页面, 当时作为实习生的我还是很高兴的. 因为一入手就是这么大的项目, 感觉我">
+<meta name="keywords" content="DXY重构记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DXY项目重构(一)--重构思路">
+<meta property="og:url" content="http://yoursite.com/2019-9-19/1991914359A/index.html">
+<meta property="og:site_name" content="Yuuuuchang&#39;s Blog">
+<meta property="og:description" content="约定1.项目暂以”DXY”为名.2.因为需要保密原因, 因此这里只会记录一些思路和遇到的问题之类. 起因我在前东家入职之后, 接手的第一个项目就是这个DXY项目. 主要是用jq, 利用requireJS来进行模块化, 是一个老项目了. 据我了解, 到我这里算是”八代单传”了. 项目很大, 约有6-8w行代码, 涉及十几个页面, 当时作为实习生的我还是很高兴的. 因为一入手就是这么大的项目, 感觉我">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2020-02-27T03:19:41.756Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DXY项目重构(一)--重构思路">
+<meta name="twitter:description" content="约定1.项目暂以”DXY”为名.2.因为需要保密原因, 因此这里只会记录一些思路和遇到的问题之类. 起因我在前东家入职之后, 接手的第一个项目就是这个DXY项目. 主要是用jq, 利用requireJS来进行模块化, 是一个老项目了. 据我了解, 到我这里算是”八代单传”了. 项目很大, 约有6-8w行代码, 涉及十几个页面, 当时作为实习生的我还是很高兴的. 因为一入手就是这么大的项目, 感觉我">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> DXY项目重构(一)--重构思路 - Yuuuuchang's Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Yuuuuchang's Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          DXY项目重构(一)--重构思路
+        
+      </h1>
+
+      <!-- <time class="post-time">
+          9月 19 2019
+      </time> -->
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <h2 id="约定"><a href="#约定" class="headerlink" title="约定"></a>约定</h2><p>1.项目暂以”DXY”为名.<br>2.因为需要保密原因, 因此这里只会记录一些思路和遇到的问题之类.</p>
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>我在前东家入职之后, 接手的第一个项目就是这个DXY项目. 主要是用jq, 利用requireJS来进行模块化, 是一个老项目了. 据我了解, 到我这里算是”八代单传”了.</p>
+<p>项目很大, 约有6-8w行代码, 涉及十几个页面, 当时作为实习生的我还是很高兴的. 因为一入手就是这么大的项目, 感觉我能在里面学到很多东西.</p>
+<p>但是接手过来一看, 怎么说呢, 一个字”乱”. 太乱了. 我看了几天, 一点头绪都没有(即使有交接的人在旁边指点, 我仍然有很多地方搞不懂以前的人为什么这么写)</p>
+<p>当时我主要面临着以下几个问题：</p>
+<p>1.<strong>无文档记录。</strong> 需求文档、开发文档、设计原图、代码规范、以及一些其他的说明文档一律没有。我接到手的只有赤裸裸的项目源代码。而说明也仅仅是口口相传，到我这里仅仅只能知道怎么跑起来，怎么开发，怎么打包发布罢了。</p>
+<p>2.<strong>项目冗余严重。</strong> 有一些因为业务调整的关系，一部分的页面和功能模块不需要了，前人仅仅是把它们的链接以及调用入口删除或注释了事，其余的代码这些没有整理到一个特定的目录上，也没有文档说明这些功能为什么废弃，怎么调用回来，前因后果一律没有，导致我后来发现这个项目大约7成的代码都是不需要再使用的了，同样的图片等静态资源也是这样的情况。</p>
+<p>3.<strong>代码复杂，耦合严重。</strong>虽然有requireJS来辅助模块化, 但是很少用到, 除了一些模块(估计是一代目或者二代目写的)是有用到这些之外, 之后的很多功能都是直接写在业务逻辑上的, 根本没有分模块。<br>后面的很多页面都是一个js洋洋洒洒几k行搞定全部，其中包括大块大块的代码注释（废弃的功能直接注释代码了事，有些仅仅是把调用处注释掉）。一个函数200行只有一句话说它的作用。这样的代码想看懂难度非常大。<br>另外这些代码很多可以抽象出来的地方都没有抽象，导致后面我开发的时候很多相似的功能都得重新写，加大开发难度。</p>
+<p>当时我还是个新手，不敢也不能对接手的工作过多评论。虽然这个项目对于我来说入手难度相当大，但还是凭着对新工作的热情看懂了大概，可以正常工作了。</p>
+<h2 id="更大的麻烦"><a href="#更大的麻烦" class="headerlink" title="更大的麻烦"></a>更大的麻烦</h2><p>随着开发工作的不断进行，我感到这个项目的更多的不便之处，主要有以下几点：</p>
+<p>1.<strong>打包流程复杂。</strong>因为特殊的项目架构，导致每一次打包都需要非常繁琐的步骤，消耗掉很多的时间（有时候是一两个小时，一般都安排任务的时候都给约一上午或一下午的时间，因为有可能需要打包多次）</p>
+<p>2.<strong>需求变更快，但开发流程复杂</strong>，项目当初是用grunt打包的，开发时候每次修改某个文件，都需要将这个文件重新编译一次，编译的时候把外部引入的模块全部提取出来合并编译一次，这就导致了编译的速度非常慢，每次修改都要等3-4秒，然后手动刷新才能看到效果，为了开发快捷有时候我都是写一大段才开始看效果，然后又花比较多的时间调试这样子，效率非常低，加上需求都比较急，这就导致了很多加班的现象。</p>
+<p>于是我花了约两周的时间想了想重构的可能性，包括对现有技术的替换以及需要剔除的功能等整理处大概真正需要做的功能。然后在早会上提出了重构的想法.</p>
+<p>无奈，因为项目比较庞大，涉及的比较多，而且时间紧张需求优先，所以重构的事情直到我提出后半年才真正开动，这个时候，仍然由我一个人负责这个项目重构的所有事宜。</p>
+<h2 id="重构思路"><a href="#重构思路" class="headerlink" title="重构思路"></a>重构思路</h2><p>这里的思路只包括准备部分，项目部分的在下篇</p>
+<p>鉴于项目目前的情况，我直接把它当作了一个全新的项目来开发。除了外部的运行环境（nwjs版本）、浏览器内核版本、基本功能这些不会变动之外，其余的（前端部分）都基本上被我更改了。我跟其他团队成员们做了以下的准备（尽管项目重构主要由我一个人负责，但是我们组的其他成员们都会协助我，感谢他们）</p>
+<p>1.<strong>功能点的确认。</strong>我们重新找了一个时间，将这个项目重头到尾跑一遍，记录下所需要的功能。然后PO跟业务决定哪些功能需要保留哪些需要删除。</p>
+<p>2.<strong>技术的选择。</strong>在这期间，公司有意希望把公司的技术栈换成以vue为主。而且vue易上手，因此我们也把项目用到的技术用vue+webpack实现。逻辑部分则用ES6，有考虑过TS，但是因为考虑到其他方面，我们还是放弃了使用TS。<br>后来决定用vue+vue-router+vuex+webpack+sass实现</p>
+<p>3.<strong>打包方面的优化</strong>因为打包的流程复杂（这部分还有后端要打包的地方）。我们直接使用bat和go，花一点时间把这个打包的流程写成脚本，并按照环境分成了不同的脚本，这样方便了团队，无需过多的人为操作。<br>另外调整了一下webpack的配置，主要是根据环境对图片这些的压缩和对视频处理（有一些短视频）的调整。<br>（后来因为是脚本在跑，所以打包这个流程的时间被缩减到了2分钟左右，再到后来的约1分钟就能完成。基本忽略不计。而因为配置错误重复打包的次数基本上没有，需要重新打包的原因一般是在测试之前发现有代码问题才修改并重新打包）</p>
+<h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><p>在准备阶段，主要遇到的都是沟通部分的问题。</p>
+<p>比如功能的增加和删除，除了需要前端做出改变之外，后端也需要做出更改和优化，但是后端也有自己的任务，不可能马上配合做出改变。而且有一些需要前端明确大概需要什么数据，后端才能知道怎么改。而这时候一切都是纸上谈兵，需要什么尚未明确。一开始我还是很努力去理清这些功能之间的联系，并且结合以前的数据给出大概需要什么，后来因为涉及的功能太多，删删改改过于频繁，所以也没办法有个确定的答复。因此这部分需要先记录下来然后延后解决。</p>
+<p>另外，有时候我也会针对功能存在的必要性与po进行讨论，有时候因为不能把控情绪讨论变成了争论，确实不该。后来才明白当我做出来的东西是要给人用的，人用的习惯用的舒服才是王道，应该要站在用户的角度去考虑，而不能仅仅是因为自己觉得要或者不要来决定一个功能的增加或删除。</p>
+<p>总的来说，解决这类问题首先是需要“心平气和”。慢慢沟通。并且多处在他们的位置想东西才能够说服他们或者理解他们。</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/DXY重构记录/">DXY重构记录</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2019-9-21/1992114359A/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">DXY项目重构(二)--页面的三层结构</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2019-9-18/1991816242A/">
+        <span class="next-text nav-default">bat备忘</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">yuuuuchang.</span>
+    <span class="power-by">Powered by Hexo and Polar Bear</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="description" content="快排">
+
+
+
+
+  <meta name="keywords" content="算法,">
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Yuuuuchang's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="http://yoursite.com/2019-8-16/19816163828A/">
+
+
+<meta name="description" content="O(nlogn) 基本思路 找一个基准数 遍历数组里的其他数, 小于基准数的放左边, 大于的放右边 左数组, 右数组递归  核心点 基数选择, 单纯只选择第一个, 如果原数组是倒序, 时间复杂度将 O(n) 交换方式  实现方式 取基数, 先随机取一位, 然后跟首位交换 左放小, 右放大, 跟基数相等的单独放一个数组 concat 组合([].concat(左, 基数, 右))  代码123456">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快排">
+<meta property="og:url" content="http://yoursite.com/2019-8-16/19816163828A/index.html">
+<meta property="og:site_name" content="Yuuuuchang&#39;s Blog">
+<meta property="og:description" content="O(nlogn) 基本思路 找一个基准数 遍历数组里的其他数, 小于基准数的放左边, 大于的放右边 左数组, 右数组递归  核心点 基数选择, 单纯只选择第一个, 如果原数组是倒序, 时间复杂度将 O(n) 交换方式  实现方式 取基数, 先随机取一位, 然后跟首位交换 左放小, 右放大, 跟基数相等的单独放一个数组 concat 组合([].concat(左, 基数, 右))  代码123456">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2020-02-27T01:12:23.436Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="快排">
+<meta name="twitter:description" content="O(nlogn) 基本思路 找一个基准数 遍历数组里的其他数, 小于基准数的放左边, 大于的放右边 左数组, 右数组递归  核心点 基数选择, 单纯只选择第一个, 如果原数组是倒序, 时间复杂度将 O(n) 交换方式  实现方式 取基数, 先随机取一位, 然后跟首位交换 左放小, 右放大, 跟基数相等的单独放一个数组 concat 组合([].concat(左, 基数, 右))  代码123456">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 快排 - Yuuuuchang's Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Yuuuuchang's Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          快排
+        
+      </h1>
+
+      <!-- <time class="post-time">
+          8月 16 2019
+      </time> -->
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>O(nlogn)</p>
+<h2 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h2><ol>
+<li>找一个基准数</li>
+<li>遍历数组里的其他数, 小于基准数的放左边, 大于的放右边</li>
+<li>左数组, 右数组递归</li>
+</ol>
+<h2 id="核心点"><a href="#核心点" class="headerlink" title="核心点"></a>核心点</h2><ol>
+<li>基数选择, 单纯只选择第一个, 如果原数组是倒序, 时间复杂度将 O(n)</li>
+<li>交换方式</li>
+</ol>
+<h2 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h2><ol>
+<li>取基数, 先随机取一位, 然后跟首位交换</li>
+<li>左放小, 右放大, 跟基数相等的单独放一个数组</li>
+<li>concat 组合([].concat(左, 基数, 右))</li>
+</ol>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 获取随机索引 */</span></span><br><span class="line"><span class="keyword">const</span> getRandomIndex = <span class="function"><span class="keyword">function</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * arr.length);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 交换 */</span></span><br><span class="line"><span class="keyword">const</span> exchange = <span class="function"><span class="keyword">function</span>(<span class="params">arr, index1, index2</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> tmp = arr[index2];</span><br><span class="line">  arr[index2] = arr[index1];</span><br><span class="line">  arr[index1] = tmp;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 排序主体 */</span></span><br><span class="line"><span class="keyword">const</span> fastSort = <span class="function"><span class="keyword">function</span>(<span class="params">arr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> left = [];</span><br><span class="line">  <span class="keyword">let</span> right = [];</span><br><span class="line">  <span class="keyword">let</span> baseArr = [];</span><br><span class="line">  <span class="keyword">if</span> (arr.length) &#123;</span><br><span class="line">    <span class="comment">// 设定基准数, 并切除基准数</span></span><br><span class="line">    <span class="keyword">const</span> index2 = getRandomIndex(arr);</span><br><span class="line">    exchange(arr, <span class="number">0</span>, index2);</span><br><span class="line">    <span class="keyword">const</span> base = arr[<span class="number">0</span>];</span><br><span class="line">    baseArr = [base];</span><br><span class="line">    arr = arr.slice(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 比基数小移动到左边, 比基数大移动到右边</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">in</span> arr) &#123;</span><br><span class="line">      <span class="keyword">let</span> val = arr[i];</span><br><span class="line">      <span class="keyword">if</span> (val &lt; base) left.push(val);</span><br><span class="line">      <span class="keyword">else</span> <span class="keyword">if</span> (val &gt; base) right.push(val);</span><br><span class="line">      <span class="keyword">else</span> baseArr.push(val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    left = fastSort(left);</span><br><span class="line">    right = fastSort(right);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> [].concat(left, baseArr, right);</span><br><span class="line">&#125;;</span><br><span class="line">arr = [<span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">2</span>];</span><br><span class="line"><span class="built_in">console</span>.time(<span class="string">"快速排序"</span>);</span><br><span class="line">fastSort(arr);</span><br><span class="line"><span class="built_in">console</span>.timeEnd(<span class="string">"快速排序"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"结果:"</span>, fastSort(arr), <span class="string">"\n\n"</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>这里使用了额外的三个数组来保存中间状态, 避免了交换的问题, 如果要节省空间, 需要使用<strong>单双边循环法</strong>来解决他们的交换问题</p>
+<h3 id="双边交换法"><a href="#双边交换法" class="headerlink" title="双边交换法"></a>双边交换法</h3><ol>
+<li>数组剔除基数</li>
+<li>数组头给 left 指针(index = 0), 数组尾给 right 指针(index = arr.length - 1)</li>
+<li>right 先行, 一直向左移动, 直到遇到比基数小的数</li>
+<li>换到 left, 一直向右移动, 直到遇到比基数大的数</li>
+<li>交换 left, right, 然后换 right 先走</li>
+<li>重复 3,4. 直到 left, right 相遇, 相遇的那个元素与基数位置交换</li>
+<li>基数左右边重复 1-6(递归)</li>
+<li>返回排序后数组</li>
+</ol>
+<h3 id="单边交换法"><a href="#单边交换法" class="headerlink" title="单边交换法"></a>单边交换法</h3><ol>
+<li>数组剔除基数</li>
+<li>从剔除后的第一个元素开始, 数组头给 mark 指针</li>
+<li>遍历数组, 如果比基数小, mark 右移一位, 然后让当前元素跟 mark 指向的元素交换</li>
+<li>遍历结束后, 根据 mark 指针指向的元素值是否大于基准值, 将这个值放到左边或右边, 然后基准值放这里</li>
+<li>基数左右边重复 1-6(递归)</li>
+<li>返回排序后的数组</li>
+</ol>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/算法/">算法</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2019-8-16/19816162252A/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">计数排序</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2019-3-29/1932913465A/">
+        <span class="next-text nav-default">根据页面的部署位置调整调用api的url</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">yuuuuchang.</span>
+    <span class="power-by">Powered by Hexo and Polar Bear</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

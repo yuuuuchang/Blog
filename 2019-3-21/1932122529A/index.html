@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="description" content="无法获取userInfo: Cannot read property 'userInfo' of undefined">
+
+
+
+
+  <meta name="keywords" content="小程序,">
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Yuuuuchang's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="http://yoursite.com/2019-3-21/1932122529A/">
+
+
+<meta name="description" content="错误描述新开了个小程序, 编译了几次之后就报了这个错(err1)  还有这个(err2)   引起原因排查发现, 小程序在触发 onLaunch 的时候调用的 “wx.getUserInfo” API 是个异步 api, 当进入 index 页面时的 onLoad, getUserInfo 没有返回值的话, 就无法通过判断, 判断代码如下: 1234567891011/** 在index.js里">
+<meta name="keywords" content="小程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="无法获取userInfo: Cannot read property &#39;userInfo&#39; of undefined">
+<meta property="og:url" content="http://yoursite.com/2019-3-21/1932122529A/index.html">
+<meta property="og:site_name" content="Yuuuuchang&#39;s Blog">
+<meta property="og:description" content="错误描述新开了个小程序, 编译了几次之后就报了这个错(err1)  还有这个(err2)   引起原因排查发现, 小程序在触发 onLaunch 的时候调用的 “wx.getUserInfo” API 是个异步 api, 当进入 index 页面时的 onLoad, getUserInfo 没有返回值的话, 就无法通过判断, 判断代码如下: 1234567891011/** 在index.js里">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="http://yoursite.com/images/20190319164050716.png">
+<meta property="og:image" content="http://yoursite.com/images/20190319163953655.png">
+<meta property="og:updated_time" content="2020-02-27T01:12:23.438Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="无法获取userInfo: Cannot read property &#39;userInfo&#39; of undefined">
+<meta name="twitter:description" content="错误描述新开了个小程序, 编译了几次之后就报了这个错(err1)  还有这个(err2)   引起原因排查发现, 小程序在触发 onLaunch 的时候调用的 “wx.getUserInfo” API 是个异步 api, 当进入 index 页面时的 onLoad, getUserInfo 没有返回值的话, 就无法通过判断, 判断代码如下: 1234567891011/** 在index.js里">
+<meta name="twitter:image" content="http://yoursite.com/images/20190319164050716.png">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 无法获取userInfo: Cannot read property 'userInfo' of undefined - Yuuuuchang's Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Yuuuuchang's Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          无法获取userInfo: Cannot read property 'userInfo' of undefined
+        
+      </h1>
+
+      <!-- <time class="post-time">
+          3月 21 2019
+      </time> -->
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <h2 id="错误描述"><a href="#错误描述" class="headerlink" title="错误描述"></a>错误描述</h2><p>新开了个小程序, 编译了几次之后就报了这个错(err1)</p>
+<p><img src="/images/20190319164050716.png" alt></p>
+<p>还有这个(err2)</p>
+<p><img src="/images/20190319163953655.png" alt></p>
+<p><br></p>
+<h2 id="引起原因"><a href="#引起原因" class="headerlink" title="引起原因"></a>引起原因</h2><p>排查发现, 小程序在触发 onLaunch 的时候调用的 “wx.getUserInfo” API 是个异步 api, 当进入 index 页面时的 onLoad, getUserInfo 没有返回值的话, 就无法通过判断, 判断代码如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 在index.js里 */</span></span><br><span class="line">onLoad: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">   <span class="comment">// 此时, "wx.getUserInfo"还没返回数据, app.globalData是在"wx.getUserInfo"创建的</span></span><br><span class="line">   <span class="comment">// 所以会因为没有app.globalData而报错(err2)</span></span><br><span class="line">   <span class="keyword">if</span> (app.globalData.userInfo) &#123;</span><br><span class="line">     <span class="keyword">this</span>.setData(&#123;</span><br><span class="line">       userInfo: app.globalData.userInfo,</span><br><span class="line">       hasUserInfo: <span class="literal">true</span></span><br><span class="line">     &#125;)</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最奇怪的一的是, 在 app.js 里, app.globalData 也是没定义就直接赋值的, 因此有了(err1)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在wx.getUserInfo的参数内</span></span><br><span class="line"><span class="comment">// 在执行这句的时候, this.globalData也是为undefined ╮(╯▽╰)╭</span></span><br><span class="line"><span class="keyword">this</span>.globalData.userInfo = res.userInfo;</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>知道了问题, 解决办法就有了</p>
+<ol>
+<li>赋值之前先加判断 this.globalData 是否存在(err1)</li>
+<li>调用之前判断 app.globalData 是否存在(err2)</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 解决err1</span></span><br><span class="line">wx.getUserInfo(&#123;</span><br><span class="line">  success: <span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 可以将 res 发送给后台解码出 unionId</span></span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.globalData) <span class="keyword">this</span>.globalData = &#123;&#125;; <span class="comment">// 加上这句</span></span><br><span class="line">    <span class="keyword">this</span>.globalData.userInfo = res.userInfo;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">onLoad: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">   <span class="keyword">if</span> (app.globalData &amp;&amp; app.globalData.userInfo) &#123; <span class="comment">// 加上"app.globalData &amp;&amp;"</span></span><br><span class="line">     ...</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><br></p>
+<p>以上</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/小程序/">小程序</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2019-3-29/1932913465A/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">根据页面的部署位置调整调用api的url</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">yuuuuchang.</span>
+    <span class="power-by">Powered by Hexo and Polar Bear</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

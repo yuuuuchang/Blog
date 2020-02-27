@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="description" content="根据页面的部署位置调整调用api的url">
+
+
+
+
+  <meta name="keywords" content="小技巧,">
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Yuuuuchang's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="http://yoursite.com/2019-3-29/1932913465A/">
+
+
+<meta name="description" content="适用范围适用于对于某个 api，都有 n 个不同的 url 地址的情况。比如，api 分测试网跟外网等  基本思路根据 location.origin 的值(当前部署位置)与在项目内设定的部署位置匹配。如果匹配成功, 则调出已经定义好的指定的一套 url。  意外情况在这个方法中我们可能有两种意外情况  当我们在开发的时候（debug 模式），我们一般使用的是本机地址（127.0.0.1），并且">
+<meta name="keywords" content="小技巧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="根据页面的部署位置调整调用api的url">
+<meta property="og:url" content="http://yoursite.com/2019-3-29/1932913465A/index.html">
+<meta property="og:site_name" content="Yuuuuchang&#39;s Blog">
+<meta property="og:description" content="适用范围适用于对于某个 api，都有 n 个不同的 url 地址的情况。比如，api 分测试网跟外网等  基本思路根据 location.origin 的值(当前部署位置)与在项目内设定的部署位置匹配。如果匹配成功, 则调出已经定义好的指定的一套 url。  意外情况在这个方法中我们可能有两种意外情况  当我们在开发的时候（debug 模式），我们一般使用的是本机地址（127.0.0.1），并且">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2020-02-27T01:12:23.439Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="根据页面的部署位置调整调用api的url">
+<meta name="twitter:description" content="适用范围适用于对于某个 api，都有 n 个不同的 url 地址的情况。比如，api 分测试网跟外网等  基本思路根据 location.origin 的值(当前部署位置)与在项目内设定的部署位置匹配。如果匹配成功, 则调出已经定义好的指定的一套 url。  意外情况在这个方法中我们可能有两种意外情况  当我们在开发的时候（debug 模式），我们一般使用的是本机地址（127.0.0.1），并且">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 根据页面的部署位置调整调用api的url - Yuuuuchang's Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Yuuuuchang's Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          根据页面的部署位置调整调用api的url
+        
+      </h1>
+
+      <!-- <time class="post-time">
+          3月 29 2019
+      </time> -->
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p><br></p>
+<h2 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h2><p>适用于对于某个 api，都有 n 个不同的 url 地址的情况。比如，api 分测试网跟外网等</p>
+<p><br></p>
+<h2 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h2><p>根据 location.origin 的值(当前部署位置)与在项目内设定的部署位置匹配。<br>如果匹配成功, 则调出已经定义好的指定的一套 url。</p>
+<p><br></p>
+<h2 id="意外情况"><a href="#意外情况" class="headerlink" title="意外情况"></a>意外情况</h2><p>在这个方法中我们可能有两种意外情况</p>
+<ol>
+<li>当我们在开发的时候（debug 模式），我们一般使用的是本机地址（127.0.0.1），并且我们有可能使用任意一个网段的 url</li>
+<li>即使我们成功在 debug 模式获得了需要的网段的 url， 因为调试的关系，有时候我们需要临时改变某个接口的 url</li>
+<li>当在生产环境中，当一个部署位置都没有命中的时候，我们应该怎么处理</li>
+</ol>
+<p><br></p>
+<h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><p>以 vue 项目为例</p>
+<ol>
+<li>首先，我们在 src 文件夹（任意也可，能调用到就行）设定一个 setting 的文件，作为配置。</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="comment">// 自动判断是否为开发模式</span></span><br><span class="line">  debug: process.env.NODE_ENV === <span class="string">"development"</span>,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 设定三个网的部署地址(多个用逗号分隔)</span></span><br><span class="line">  depAddress: &#123;</span><br><span class="line">    out: <span class="string">""</span>, <span class="comment">// 外网</span></span><br><span class="line">    <span class="keyword">in</span>: <span class="string">""</span>, <span class="comment">// 内网</span></span><br><span class="line">    test: <span class="string">""</span> <span class="comment">// 测试网</span></span><br><span class="line">  &#125;,</span><br><span class="line">  defaultAddr: <span class="string">"in"</span>, <span class="comment">// 在debug模式下, 应该使用哪个网的地址</span></span><br><span class="line">  <span class="comment">// 如果没有命中部署位置，则抛出错误</span></span><br><span class="line">  <span class="comment">// 也可以设置成"in","test","out"来指定使用哪一个网的网址</span></span><br><span class="line">  otherAddr: <span class="literal">false</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>然后，我们在项目内新建一个 api 文件夹，内包含两个文件（index.js 和 urls.js）<br>我们在 urls.js 主要实现如下功能： - 定义三个网的不同 api 的 url 地址 - 如果 location.origin 跟 setting 的某一个网段匹配，则使用那个网段的地址 - 如果是 debug 模式（通过 setting.debug 判断），那么根据 setting 调用对应的地址 - 如果 settingAddr 为 false，当部署位置不命中， 而且不是 debug 模式的时候，报错提示，页面不予显示（会终止页面运行，出现空白页） - 如果设置了其他 settingAddr 的值，那么就调用对应的 url</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** api 地址 */</span></span><br><span class="line"><span class="keyword">import</span> setting <span class="keyword">from</span> <span class="string">"../setting"</span>;</span><br><span class="line"><span class="keyword">const</span> addr = setting.depAddress; <span class="comment">// 部署地址对象</span></span><br><span class="line"><span class="keyword">const</span> addrArr = <span class="built_in">Object</span>.keys(addr).map(<span class="function"><span class="params">v</span> =&gt;</span> addr[v]); <span class="comment">// 部署地址数组</span></span><br><span class="line"><span class="keyword">const</span> dfAddr = addr[setting.defaultAddr]; <span class="comment">// debug模式下使用的部署地址</span></span><br><span class="line"><span class="keyword">const</span> otAddr = setting.otherAddr; <span class="comment">// 非debug非部署地址使用的地址</span></span><br><span class="line"><span class="keyword">let</span> urls = &#123;&#125;;</span><br><span class="line">urls[addr.test] = &#123;</span><br><span class="line">  <span class="comment">/** 内测 */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">urls[addr.in] = &#123;</span><br><span class="line">  <span class="comment">/** 内网 */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">urls[addr.out] = &#123;</span><br><span class="line">  <span class="comment">/** 外网 */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> url;</span><br><span class="line"><span class="keyword">const</span> i = addrArr.indexOf(location.origin); <span class="comment">// 在部署地址组中筛选出符合当前服务器地址的索引</span></span><br><span class="line"><span class="keyword">if</span> (setting.debug) url = urls[dfAddr];</span><br><span class="line"><span class="comment">// debug模式: 使用defaultAddr</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (~i) url = urls[location.origin];</span><br><span class="line"><span class="comment">// 在定义的部署位置内: 使用对应的部署位置</span></span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (!otAddr)</span><br><span class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"注意! 当前服务器与配置不符, 页面已经停止运行!"</span>);</span><br><span class="line"><span class="keyword">else</span> url = urls[addr[otAddr]];</span><br><span class="line"></span><br><span class="line"><span class="comment">/** 本地服务器的额外设置 */</span></span><br><span class="line"><span class="keyword">if</span> (setting.debug) &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> url;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>我们在 api/index.js 可以这么调用 url（示例）</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">"axios"</span>;</span><br><span class="line"><span class="keyword">import</span> urls <span class="keyword">from</span> <span class="string">"./urls"</span>;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  getCode() &#123;</span><br><span class="line">    <span class="keyword">return</span> axios.post(<span class="comment">/*...*/</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><br><br><br><br>以上</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/小技巧/">小技巧</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2019-8-16/19816163828A/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">快排</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2019-3-21/1932122529A/">
+        <span class="next-text nav-default">无法获取userInfo: Cannot read property 'userInfo' of undefined</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">yuuuuchang.</span>
+    <span class="power-by">Powered by Hexo and Polar Bear</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

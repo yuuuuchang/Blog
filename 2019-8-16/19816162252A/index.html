@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="description" content="计数排序">
+
+
+
+
+  <meta name="keywords" content="算法,">
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Yuuuuchang's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="http://yoursite.com/2019-8-16/19816162252A/">
+
+
+<meta name="description" content="限制 针对的是整数数组 数组长度不能过长  基本思路 创建一个空数组(tmp) 遍历要排序的数组(arr), 元素与 tmp 的下标相同的话, tmp[元素]+=1; 遍历完毕之后, 根据 tmp 的下标对应的数, 组合数组  代码12345678910111213141516function countSort(arr, maxNum) &amp;#123;  let tmp = Array(maxNu">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="计数排序">
+<meta property="og:url" content="http://yoursite.com/2019-8-16/19816162252A/index.html">
+<meta property="og:site_name" content="Yuuuuchang&#39;s Blog">
+<meta property="og:description" content="限制 针对的是整数数组 数组长度不能过长  基本思路 创建一个空数组(tmp) 遍历要排序的数组(arr), 元素与 tmp 的下标相同的话, tmp[元素]+=1; 遍历完毕之后, 根据 tmp 的下标对应的数, 组合数组  代码12345678910111213141516function countSort(arr, maxNum) &amp;#123;  let tmp = Array(maxNu">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2020-02-27T01:12:23.440Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="计数排序">
+<meta name="twitter:description" content="限制 针对的是整数数组 数组长度不能过长  基本思路 创建一个空数组(tmp) 遍历要排序的数组(arr), 元素与 tmp 的下标相同的话, tmp[元素]+=1; 遍历完毕之后, 根据 tmp 的下标对应的数, 组合数组  代码12345678910111213141516function countSort(arr, maxNum) &amp;#123;  let tmp = Array(maxNu">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> 计数排序 - Yuuuuchang's Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Yuuuuchang's Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          计数排序
+        
+      </h1>
+
+      <!-- <time class="post-time">
+          8月 16 2019
+      </time> -->
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <h2 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h2><ol>
+<li>针对的是整数数组</li>
+<li>数组长度不能过长</li>
+</ol>
+<h2 id="基本思路"><a href="#基本思路" class="headerlink" title="基本思路"></a>基本思路</h2><ol>
+<li>创建一个空数组(tmp)</li>
+<li>遍历要排序的数组(arr), 元素与 tmp 的下标相同的话, tmp[元素]+=1;</li>
+<li>遍历完毕之后, 根据 tmp 的下标对应的数, 组合数组</li>
+</ol>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">countSort</span>(<span class="params">arr, maxNum</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> tmp = <span class="built_in">Array</span>(maxNum + <span class="number">1</span>).fill(<span class="number">0</span>);</span><br><span class="line">  <span class="keyword">let</span> res = [];</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">in</span> arr) &#123;</span><br><span class="line">    tmp[arr[i]]++;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">in</span> tmp) &#123;</span><br><span class="line">    res = res.concat(<span class="built_in">Array</span>(tmp[i]).fill(+i));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line">arr = [<span class="number">3</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">2</span>];</span><br><span class="line"><span class="built_in">console</span>.time(<span class="string">"计数排序"</span>);</span><br><span class="line">countSort(arr, <span class="number">8</span>);</span><br><span class="line"><span class="built_in">console</span>.timeEnd(<span class="string">"计数排序"</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"结果:"</span>, countSort(arr, <span class="number">8</span>), <span class="string">"\n\n"</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="改为稳定排序"><a href="#改为稳定排序" class="headerlink" title="改为稳定排序"></a>改为稳定排序</h2><p>以上的排序不是稳定的排序, 想要改为稳定排序有以下方法</p>
+<ol>
+<li>在 tmp 排序完毕之后, tmp 从第二个元素开始, 各元素都加上之前所有元素之和. 例如, 对[1,1,1,1,1] =&gt; [1,2,3,4,5], 这样做, 相当于 tmp 里的所有元素, 都表示排序后数组它们是第几大(相同数有同样的第几大).</li>
+<li>创建 res = [], 然后 arr 倒序遍历, 找到就 i = tmp[arr[i]] - 1, 同时放入 res[i - 1]内</li>
+<li>排序好之后, 将 res 的空元素剔除掉, 就得到了排序后的数组了.</li>
+</ol>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/算法/">算法</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2019-8-16/19816165141A/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">最大公约数</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    
+    
+      <a class="next" href="/2019-8-16/19816163828A/">
+        <span class="next-text nav-default">快排</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">yuuuuchang.</span>
+    <span class="power-by">Powered by Hexo and Polar Bear</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>

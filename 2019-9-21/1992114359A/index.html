@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="description" content="DXY项目重构(二)--页面的三层结构">
+
+
+
+
+  <meta name="keywords" content="DXY重构记录,">
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Yuuuuchang's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="http://yoursite.com/2019-9-21/1992114359A/">
+
+
+<meta name="description" content="经过了大约两周的准备阶段工作，我已经基本上了解了需要保留的功能，并且将这个项目的初始化给做好了。在写设计思路之前有一个点需要记录一下。 关于nwjs项目的热更新之前使用grunt打包，每次修改在等待它编译完成之后，都需要一次手动刷新才能看到效果. 这个过程一般是4秒, 非常影响开发体验. 所以当时我们的总监建议我们在开发的时候使用普通浏览器开发，我觉得这是个挺好的办法。我通过配置 “–watch”">
+<meta name="keywords" content="DXY重构记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DXY项目重构(二)--页面的三层结构">
+<meta property="og:url" content="http://yoursite.com/2019-9-21/1992114359A/index.html">
+<meta property="og:site_name" content="Yuuuuchang&#39;s Blog">
+<meta property="og:description" content="经过了大约两周的准备阶段工作，我已经基本上了解了需要保留的功能，并且将这个项目的初始化给做好了。在写设计思路之前有一个点需要记录一下。 关于nwjs项目的热更新之前使用grunt打包，每次修改在等待它编译完成之后，都需要一次手动刷新才能看到效果. 这个过程一般是4秒, 非常影响开发体验. 所以当时我们的总监建议我们在开发的时候使用普通浏览器开发，我觉得这是个挺好的办法。我通过配置 “–watch”">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2020-02-27T06:26:41.583Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DXY项目重构(二)--页面的三层结构">
+<meta name="twitter:description" content="经过了大约两周的准备阶段工作，我已经基本上了解了需要保留的功能，并且将这个项目的初始化给做好了。在写设计思路之前有一个点需要记录一下。 关于nwjs项目的热更新之前使用grunt打包，每次修改在等待它编译完成之后，都需要一次手动刷新才能看到效果. 这个过程一般是4秒, 非常影响开发体验. 所以当时我们的总监建议我们在开发的时候使用普通浏览器开发，我觉得这是个挺好的办法。我通过配置 “–watch”">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> DXY项目重构(二)--页面的三层结构 - Yuuuuchang's Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Yuuuuchang's Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          DXY项目重构(二)--页面的三层结构
+        
+      </h1>
+
+      <!-- <time class="post-time">
+          9月 21 2019
+      </time> -->
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <p>经过了大约两周的准备阶段工作，我已经基本上了解了需要保留的功能，并且将这个项目的初始化给做好了。在写设计思路之前有一个点需要记录一下。</p>
+<h3 id="关于nwjs项目的热更新"><a href="#关于nwjs项目的热更新" class="headerlink" title="关于nwjs项目的热更新"></a>关于nwjs项目的热更新</h3><p>之前使用grunt打包，每次修改在等待它编译完成之后，都需要一次手动刷新才能看到效果. 这个过程一般是4秒, 非常影响开发体验.</p>
+<p>所以当时我们的总监建议我们在开发的时候使用普通浏览器开发，我觉得这是个挺好的办法。我通过配置 “–watch”，同时运行热更新，达成了在修改的时候浏览器可以进行热更新，而对于nwjs的浏览器则完成了自动编译（这时候还需要按F5）。直到我后来开发的时候遇到了一些问题：</p>
+<p><strong>遇到的问题</strong></p>
+<p>1.当前开发调试的浏览器与nwjs添加的浏览器的内核版本相距太远，因此在渲染机制上有一定的差别。往往是在普通浏览器上能够正常显示，但是nwjs那边却布局错乱了（这里的nwjs指的是它附带的浏览器，以后为了方便也这么称呼）。特别是涉及到flex部分。</p>
+<p>说明：指的是chrome浏览器版本，目前已经76+，而nwjs是50+，因为项目性质要求，不需要考虑其他浏览器，并且这个50+的不能替换，因为这是能支持xp的最后一个版本的浏览器，更高就不能支持xp系统了</p>
+<p>2.除了内核兼容性（或者是渲染机制）有差别之外，他们在性能上也是有很大差异，nwjs的浏览器实在太慢了，有时候没有做出来还不知道有这么大的差别，因此需要添加很多的优化手段（缓存，预加载，懒加载等）。而这些需要在实际nwjs运行才能显示出来，这样要求我开发的时候兼顾两个浏览器的差异。相比之下还是造成了新的麻烦.</p>
+<p><strong>解决办法</strong></p>
+<p>后来我就在想直接让nw的浏览器访问webpack热更新服务器的地址就行了。为了方便，我没有在nwjs直接配置需要打开的地址，而是让其先跳转到正常的地址之后，再通过window.location.href来切换。</p>
+<p><strong>优化方向</strong></p>
+<p>当然，因为需要额外的环境判断和跳转的代码，这部分其实对于正常运行的程序来说是个冗余，所以还可以用脚本来配置nwjs的跳转链接修改为正常或者开发地址。</p>
+<p><br></p>
+<h3 id="解决页面组织重用的实践——组件Components、模块modules、页面views"><a href="#解决页面组织重用的实践——组件Components、模块modules、页面views" class="headerlink" title="解决页面组织重用的实践——组件Components、模块modules、页面views"></a>解决页面组织重用的实践——组件Components、模块modules、页面views</h3><p><strong>实践</strong></p>
+<p>我刚毕业的时候, 以为页面就是像面条一样, 一路写到尾. 我也是这么干的, 这使得我后来在po修改需求, 或者做相似的需求的时候我就很难受, 需要复制, 改变某处地方, 其它相同的地方就又要复制一遍, 非常麻烦.</p>
+<p>所以我就在想, 有没有什么办法可以改变这一现状?</p>
+<p>我有经常看那些技术公众号的习惯, 比如”前端早读课”, “前端之巅”这些, 里面有一段时间火起来一个叫”组件化”的名字, 等我了解这个组件化就是搭积木的过程之后, 就在想我是不是也能根据这个做点什么?</p>
+<p>当时接到的一个任务需要写一个页面, 这个页面有一个头部, 头部有logo, 用户信息, 最小化, 最大化, 关闭按钮等, 但是这个关闭按钮在其它地方同时存在, 这是真实需要的需求, 一个关闭按钮在右上角, 一个关闭按钮在右边偏下的位置.</p>
+<p>于是我就开始根据这个, 开始尝试”组件化”的方式开发.</p>
+<blockquote>
+<p>我是这么做的:</p>
+<ol>
+<li>我把logo, 用户信息, 最小化, 最大化, 关闭按钮这些分别写出来</li>
+<li>然后用一个组件把这些合并起来, 称为m-header</li>
+<li>最后用一个组件把m-header引入进去, 同时存在的有m-content(内容组件)</li>
+</ol>
+</blockquote>
+<p>这么写后不久, 又有一个新需求来, 只不过这次的m-header样式改变了一些, 而里面的子组件也改变了一些. 但是由于之前的结构, 我很快就做好了.</p>
+<p>这下尝到甜头的我一发不可收拾, 我这么做既能很快完成工作, 又很轻松, 还很好改.</p>
+<p>后来经过几次这样的需求, 我这么处理都能取得很好的效果之后, 我就把这么结构把他抽象出来, 作为我以后写页面的一个通用的结构了.</p>
+<p><strong>抽象</strong></p>
+<p>我把这个写页面的过程想象成搭积木, 我先做好每一个积木, 然后通过一定方式组织起来, 最后再一起组装. 这东西有人叫”组件化”,有人叫”模块化”, 不管怎么说, 意思就是这么个意思.</p>
+<p>我把这个抽象出来的结构分为三部分<br>1.component(组件), 类似于logo, 用户名, 最小化, 最大化, 关闭我都称作组件;<br>2.modules(模块), m-header都叫模块;<br>3.views(页面), n个模块或者n个组件组成页面</p>
+<p>后来我都按如此方法写页面, 果然大大加快了速度, 也省去了很多修改的功夫, 组件化真是个好东西. 这种方法帮助我加少了很多班</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/DXY重构记录/">DXY重构记录</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2019-9-19/1991914359A/">
+        <span class="next-text nav-default">DXY项目重构(一)--重构思路</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">yuuuuchang.</span>
+    <span class="power-by">Powered by Hexo and Polar Bear</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>
