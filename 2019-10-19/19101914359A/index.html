@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="description" content="DXY项目重构(三)--数据处理">
+
+
+
+
+  <meta name="keywords" content="DXY重构记录,">
+
+
+
+
+
+  <link rel="alternate" href="/default" title="Yuuuuchang's Blog">
+
+
+
+
+
+
+<link rel="canonical" href="http://yoursite.com/2019-10-19/19101914359A/">
+
+
+<meta name="description" content="vuex与接口的结合这个新项目, 我们为了保留一些页面上的状态, 使用了vuex. 但是有一些从接口来的数据需要保留, 我们也写进了store里. 我们刚开始写的流程是这样的:  在某个页面组件上请求数据 -&amp;gt; 对数据进行处理 -&amp;gt; 存放到store中  就这样写了一段时间, 都觉得挺好用, 但是直到我们遇到了以下的一些需要  对于某一个接口, 我们多个页面都需要用 对于某一个接口的数">
+<meta name="keywords" content="DXY重构记录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DXY项目重构(三)--数据处理">
+<meta property="og:url" content="http://yoursite.com/2019-10-19/19101914359A/index.html">
+<meta property="og:site_name" content="Yuuuuchang&#39;s Blog">
+<meta property="og:description" content="vuex与接口的结合这个新项目, 我们为了保留一些页面上的状态, 使用了vuex. 但是有一些从接口来的数据需要保留, 我们也写进了store里. 我们刚开始写的流程是这样的:  在某个页面组件上请求数据 -&amp;gt; 对数据进行处理 -&amp;gt; 存放到store中  就这样写了一段时间, 都觉得挺好用, 但是直到我们遇到了以下的一些需要  对于某一个接口, 我们多个页面都需要用 对于某一个接口的数">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2020-02-27T07:41:40.103Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DXY项目重构(三)--数据处理">
+<meta name="twitter:description" content="vuex与接口的结合这个新项目, 我们为了保留一些页面上的状态, 使用了vuex. 但是有一些从接口来的数据需要保留, 我们也写进了store里. 我们刚开始写的流程是这样的:  在某个页面组件上请求数据 -&amp;gt; 对数据进行处理 -&amp;gt; 存放到store中  就这样写了一段时间, 都觉得挺好用, 但是直到我们遇到了以下的一些需要  对于某一个接口, 我们多个页面都需要用 对于某一个接口的数">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> DXY项目重构(三)--数据处理 - Yuuuuchang's Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">Yuuuuchang's Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/archives">
+                            
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          DXY项目重构(三)--数据处理
+        
+      </h1>
+
+      <!-- <time class="post-time">
+          10月 19 2019
+      </time> -->
+    </header>
+
+
+
+    
+            <div class="post-content">
+            <h3 id="vuex与接口的结合"><a href="#vuex与接口的结合" class="headerlink" title="vuex与接口的结合"></a>vuex与接口的结合</h3><p>这个新项目, 我们为了保留一些页面上的状态, 使用了vuex. 但是有一些从接口来的数据需要保留, 我们也写进了store里.</p>
+<p>我们刚开始写的流程是这样的:</p>
+<blockquote>
+<p>在某个页面组件上请求数据 -&gt; 对数据进行处理 -&gt; 存放到store中</p>
+</blockquote>
+<p>就这样写了一段时间, 都觉得挺好用, 但是直到我们遇到了以下的一些需要</p>
+<ul>
+<li>对于某一个接口, 我们多个页面都需要用</li>
+<li>对于某一个接口的数据, 我们不同页面需要不同的方式去处理</li>
+</ul>
+<p>由于我们的接口请求都写在了页面组件上, 这么一来对于第一点, 我们只能又通过复制到其它页面完成, 然后就是第二点, 在第一点的基础上对各页进行个别的调整, 接下来每次改动这个接口, 我们都要把这个接口关联的页面都重新改一遍.</p>
+<p>针对这种问题, 我想到了使用vuex的actions特性, 我们可以利用actions可以异步的特性, 用actions访问接口, 然后将数据直接提交到store.</p>
+<p>于是修改如下<br>1.将所有接口从页面中抽出来,放到actions中, 然后通过commit提交给store;<br>2.针对同一个接口的不同处理,我们在actions中处理好, 然后存到store中不同的位置上;</p>
+<p>这样子修改, 省去了很多不必要的麻烦, 也将接口统一在了actions上, 以后所有有关接口的问题, 直接从actions找就可以了, 不用一个个页面去翻, 开发效率也提升了很多.</p>
+<p><br></p>
+<h3 id="接口的两层结构"><a href="#接口的两层结构" class="headerlink" title="接口的两层结构"></a>接口的两层结构</h3><p>就这么过了一段时间, 我们发现store的体积越来越大, 因为我们存放了太多数据了. 进一步排查发现, 我们对于某种接口的多样处理太多了, 导致某个接口数据的不同版本不断叠压在store上, 导致store越来越大. 而且因为数据处理的多样性, 导致actions部分接口的处理代码太臃肿, 每次找对应的接口修改某种特定样式的处理都特别头大.</p>
+<p>为了改变这种情况, 我决定要对接口处理这部分进行拆分, 就像之前的页面三层结构一样</p>
+<p>我首先想到的是搭积木的方式, 可是这种让我受益良多的方式在目前而言是没有用处的. 后来看到了三层结构的组织方式, 我其实也是按照组件的应用范围进行了分层处理, 分层分层, 其实接口的请求可以分为请求数据和处理数据两层. 或许我可以试试这个.</p>
+<p>经过一番思考, 我用某一个接口做实验:<br>1.从actions的请求的数据不做处理, 将原封不动的提交给store;<br>2.利用vuex的getter特性, 根据store上的数据分别计算出不同的处理结果;</p>
+<p>效果拔群!</p>
+<p>我发现, 这么做既减少了actions代码的体积, 也对页面的特殊处理跟本身请求分开了, 使得更加好改动, 也压缩了store的体积. 所以我马上跟我的小伙伴一起把这些接口全部如法炮制.</p>
+<p><br></p>
+<h3 id="不重复请求与数据的持久化"><a href="#不重复请求与数据的持久化" class="headerlink" title="不重复请求与数据的持久化"></a>不重复请求与数据的持久化</h3><p>vuex有个特点, 所有的数据都是存放到内存, 但是我们一般页面的刷新都意味着重新加载这个页面的所有文件, 所有代码都重新运行一遍.<br>这就导致了默认情况下, 用户点击刷新将会导致之前存储的数据全部清空!</p>
+<p>为了恢复之前的数据, 我们需要有以下两种方式处理<br>1.页面刷新之后所有接口数据重新请求<br>2.页面刷新之前把当前存的数据放起来, 刷新完之后再取出来</p>
+<p>对于第一种, 我们这些对于数据的即时性跟保密性都要求不高的项目来说, 是不必要的. 毕竟接口请求也需要时间和资源, 而且如果数据不走接口, 我们根本恢复不了.</p>
+<p>于是我采取了第二种方案, 利用vuex的插件机制写了一个数据持久化的插件, 基本流程是这样的;<br>1.在每次mutations更新了store之后, 都保存一份副本到全局中;<br>2.刷新之前有一个onbeforeunload事件被触发, 当这个事件被触发的时候, 把保存的副本存到localStorage中<br>3.刷新之后触发onload事件, 如果localStroage中存在副本, 取出副本到全局和store, 然后删除localStorage中的副本; 如果没有, 保存当前的store到全局中作为副本</p>
+<p>这样利用刷新前后的事件, 和localStorage的静态文件的特性, 我们成功保持了状态, 节省了很多不必要的重复请求. 刷新后的页面展示也更加快速. 因为不用再等接口数据嘛.</p>
+
+            </div>
+          
+
+    
+      <footer class="post-footer">
+		
+		<div class="post-tags">
+		  
+			<a href="/tags/DXY重构记录/">DXY重构记录</a>
+		  
+		</div>
+		
+
+        
+        
+  <nav class="post-nav">
+    
+    
+      <a class="next" href="/2019-9-21/1992114359A/">
+        <span class="next-text nav-default">DXY项目重构(二)--页面的三层结构</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2019 -
+    
+    2020
+    <span class="footer-author">yuuuuchang.</span>
+    <span class="power-by">Powered by Hexo and Polar Bear</span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>
